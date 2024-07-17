@@ -8,6 +8,32 @@ from payments.models import AdvancedFilter, BoostedProfile, Premium, PremiumHook
 
 
 
+class DefaultFilterManager(models.Model):
+    sexual_orientation = models.CharField(null=True, blank=True, max_length=300)
+    what_you_are_looking_for = models.CharField(null=True, blank=True, max_length=300)
+    relationship_status = models.CharField(null=True, blank=True, max_length=300)
+    interests = models.TextField(null=True, blank=True)
+    bio = models.TextField(null=True, blank=True)
+    school = models.TextField(null=True, blank=True)
+    company_name = models.TextField(null=True, blank=True)
+    work_title = models.TextField(null=True, blank=True)
+    language = models.TextField(null=True, blank=True)
+    drink = models.TextField(null=True, blank=True)
+    drug = models.TextField(null=True, blank=True)
+    kids = models.TextField(null=True, blank=True)
+    introvert = models.TextField(null=True, blank=True)
+    educationLevel = models.TextField(null=True, blank=True)
+    relationshipGoal = models.TextField(null=True, blank=True)
+    starSign = models.TextField(null=True, blank=True)
+    pets = models.TextField(null=True, blank=True)
+    gender = models.TextField(null=True, blank=True)
+    religion = models.TextField(null=True, blank=True)
+    ethnicity= models.TextField(null=True, blank=True)
+
+    class Meta:
+        abstract = True
+
+
 
 
 class UserManager(BaseUserManager):
@@ -44,7 +70,12 @@ class UserManager(BaseUserManager):
 
 
 
-class User(AbstractUser):
+class UserAdvancedFilter(DefaultFilterManager):
+    class Meta:
+        pass
+
+
+class User(AbstractUser,DefaultFilterManager):
     username = models.CharField(null=True, blank=True,max_length=150)
     full_name = models.CharField(null=True, blank=True,max_length=150)
     phone_number =models.CharField(unique=True,null=False, blank=False,max_length=150)
@@ -54,26 +85,7 @@ class User(AbstractUser):
     is_active = models.BooleanField(default=False)
     date_of_birth = models.CharField(null=True, blank=True, max_length=300)
     age = models.CharField(null=True, blank=True, max_length=300)
-    sexual_orientation = models.CharField(null=True, blank=True, max_length=300)
-    what_you_are_looking_for = models.CharField(null=True, blank=True, max_length=300)
-    relationship_status = models.CharField(null=True, blank=True, max_length=300)
-    interests = models.TextField(null=True, blank=True)
-    bio = models.TextField(null=True, blank=True)
-    school = models.TextField(null=True, blank=True)
-    company_name = models.TextField(null=True, blank=True)
-    work_title = models.TextField(null=True, blank=True)
-    language = models.TextField(null=True, blank=True)
-    drink = models.TextField(null=True, blank=True)
-    drug = models.TextField(null=True, blank=True)
-    kids = models.TextField(null=True, blank=True)
-    introvert = models.TextField(null=True, blank=True)
-    educationLevel = models.TextField(null=True, blank=True)
-    relationshipGoal = models.TextField(null=True, blank=True)
-    starSign = models.TextField(null=True, blank=True)
-    pets = models.TextField(null=True, blank=True)
-    gender = models.TextField(null=True, blank=True)
-    religion = models.TextField(null=True, blank=True)
-    ethnicity= models.TextField(null=True, blank=True)
+    
     profile_views = models.IntegerField(default=0, null=True, blank=True)
     first_profile_image = models.ImageField(null=True, blank=True, upload_to="profile_images/")
     second_profile_image = models.ImageField(null=True, blank=True, upload_to="profile_images/")
@@ -81,6 +93,10 @@ class User(AbstractUser):
     fourth_profile_image = models.ImageField(null=True, blank=True, upload_to="profile_images/")
     fifth_profile_image = models.ImageField(null=True, blank=True, upload_to="profile_images/")
     primary_profile_image_index = models.IntegerField(null=True, blank=True, default=0)
+    
+
+
+    advancedFilterValues = models.OneToOneField(UserAdvancedFilter, on_delete=models.CASCADE, null=True, blank=True)
 
     ##Subscriptions
     premium = models.OneToOneField(Premium, on_delete=models.CASCADE, related_name="premium", null=True, blank=True)

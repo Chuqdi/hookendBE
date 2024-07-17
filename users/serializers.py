@@ -1,14 +1,17 @@
 from blocks.serailizers import BlockSerializer
 from likes.serializers import LikeSerializer
 from payments.serializers import AdvancedFilterSerializer, BoostedProfileSerializer, PremiumHookedSerializer, PremiumSerializer, WildFeatureSerializer
-from users.models import  User
+from users.models import  User,UserAdvancedFilter
 from rest_framework import serializers
 from rest_framework.authtoken.models import Token
 from rest_framework.exceptions import ValidationError
 from django.conf import settings
 
 
-
+class UserAdvancedFilterSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserAdvancedFilter
+        fields = "__all__"
 
 
 class SignUpSerializer(serializers.ModelSerializer):
@@ -46,6 +49,10 @@ class SignUpSerializer(serializers.ModelSerializer):
     )
     users_blocked= BlockSerializer(
         many=True,
+        read_only=True,
+    )
+    advancedFilterValues =UserAdvancedFilterSerializer(
+        many=False,
         read_only=True,
     )
 
@@ -92,6 +99,7 @@ class SignUpSerializer(serializers.ModelSerializer):
             "fourth_profile_image",
             "fifth_profile_image",
             "users_blocked",
+            "advancedFilterValues",
 
             "premium",
             "premiumHooked",

@@ -2,7 +2,7 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 
 from payments.models import AdvancedFilter, BoostedProfile, Premium, WildFeature, PremiumHooked
-from .models import User
+from .models import User, UserAdvancedFilter
 
 @receiver(post_save, sender=User) 
 def create_profile(sender, instance, created, **kwargs):
@@ -12,6 +12,7 @@ def create_profile(sender, instance, created, **kwargs):
         wildFeature = WildFeature.objects.create()
         advancedFilter = AdvancedFilter.objects.create()
         boostedProfile = BoostedProfile.objects.create()
+        advancedFilterValues  = UserAdvancedFilter.objects.create()
 
         instance.premium = premium
         instance.premiumHooked = premiumHooked
@@ -19,4 +20,5 @@ def create_profile(sender, instance, created, **kwargs):
         instance.advancedFilter = advancedFilter
         instance.advancedFilter = advancedFilter
         instance.boostedProfile = boostedProfile
+        instance.advancedFilterValues = advancedFilterValues
         instance.save()

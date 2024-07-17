@@ -1,9 +1,10 @@
 import threading
 from django.http import HttpResponse
 from django.shortcuts import render
-from users.models import  User
+from users.models import  User, UserAdvancedFilter
 from users.serializers import (
     SignUpSerializer,
+    UserAdvancedFilterSerializer,
 )
 from django.contrib.auth import get_user_model
 from rest_framework.response import Response
@@ -15,6 +16,77 @@ from django.db.models import Q
 from utils.helpers import generateAPIResponse, generateUserOTP
 
 
+commonFilters = [
+    "sexual_orientation",
+    "what_you_are_looking_for",
+    "relationship_status",
+    # "interests",
+    # "bio",
+    "school",
+    # "company_name",
+    # "work_title",
+    "language",
+    "drink",
+    "drug",
+    "kids",
+    "introvert",
+    "educationLevel",
+    "relationshipGoal",
+    "starSign",
+    "pets",
+    "religion",
+    "ethnicity"
+]
+def implementAdvancedFilter(users, user):
+
+    filter_conditions = Q()
+    advancedFilter = UserAdvancedFilter.objects.filter(id = user.advancedFilterValues.id)
+
+    for field in commonFilters:
+        values = advancedFilter.values_list(field, flat=True)
+        for value in values:
+            if value:
+                filter_conditions |= Q(**{f"{field}__icontains": value})
+        
+    filteredUsers = users.filter(filter_conditions)
+    return filteredUsers
+
+
+
+class ImplementAdavancedFilterView(APIView):
+    permission_classes = [permissions.AllowAny]
+    def get(self, request,email):
+        try:
+            user = User.objects.get(email=email)
+        except User.DoesNotExist:
+            return generateAPIResponse({}, "User not found", status=status.HTTP_400_BAD_REQUEST)
+        users = User.objects.filter(
+            ~Q(id = user.id)
+        )
+        filteredUsers = implementAdvancedFilter(users,user)
+        print(filteredUsers)
+        return generateAPIResponse(
+            SignUpSerializer(filteredUsers, many = True).data,
+            "Users filtered successfully",
+            status=status.HTTP_200_OK
+        )
+
+
+class RemoveAdvancedFilterField(APIView):
+    def patch(self, request):
+        user = request.user
+        advancedFilter = UserAdvancedFilter.objects.get(id = user.advancedFilterValues.id)
+        identifier = request.data.get("identifier")
+        print(identifier)
+        setattr(advancedFilter, identifier, "")
+        advancedFilter.save()
+        user.advancedFilterValues = advancedFilter
+
+        return generateAPIResponse(
+            SignUpSerializer(user).data,
+            "Advanced filter removed successfully",
+            status=status.HTTP_200_OK
+        )
 
 
 
@@ -220,6 +292,25 @@ class UpdateUserDataView(APIView):
     
 
 
+class GetUserMatchView(APIView):
+    def get(self, request):
+        user = request.user
+        users = User.objects.filter(
+            Q(
+                ~Q(gender = user.gender)
+                |
+                Q(country__icontains = user.country)
+                |
+                Q(state__icontains = user.state)
+            )
+        ).exclude(id = user.id).distinct()
+
+        return generateAPIResponse(
+            SignUpSerializer(users, many=True).data,
+            "User retrieved successfully",
+            status=status.HTTP_200_OK
+        )
+
 class Me(APIView):
     def get(self, request):
         user = request.user
@@ -255,6 +346,11 @@ class GetUsersListView(APIView):
             users = users.filter(gender="non_binary")
         if len(country):
             users = users.filter(country=country)
+        
+        if ageMaximumRange and ageMinimumRange:
+            users = users.filter(age__range=(int(ageMinimumRange), int(ageMaximumRange)))
+        
+
 
 
 
@@ -274,3 +370,52 @@ class IncreaseUserViewsCountView(APIView):
         user.profile_views = user.profile_views + 1
         user.save()
         return generateAPIResponse({}, "User views count increased successfully", status.HTTP_200_OK)
+    
+
+
+class UpdateUserAdvancedFilterFieldView(APIView):
+    permission_classes =[permissions.AllowAny]
+    def post(self, request):
+        user = request.user
+        email = request.data.get('email')
+        data = request.data
+
+
+        try:
+            user = User.objects.get(email=email)
+            
+        except User.DoesNotExist as e:
+            return generateAPIResponse({},"User not found", status.HTTP_404_NOT_FOUND)
+        del data["email"]
+        serializer = UserAdvancedFilterSerializer(instance=user.advancedFilterValues,  partial=True, data=data)
+        user = SignUpSerializer(user)
+
+
+
+        if serializer.is_valid():
+            serializer.save()
+            return generateAPIResponse(user.data,"User advanced filter data updated successfully", status.HTTP_200_OK)
+        
+
+        return Response(data={"message": "Error updating users credentials"}, status=status.HTTP_400_BAD_REQUEST)
+    
+
+
+class UpdatePassworAuthdView(APIView):
+    def patch(self, request):
+        oldPassword = request.data.get("oldPassword")
+        newPassword = request.data.get("newPassword")
+        user = request.user
+
+        if not user.check_password(oldPassword):
+            return generateAPIResponse({}, "Old password does not match", status.HTTP_401_UNAUTHORIZED)
+        
+        user.set_password(newPassword)
+        user.save()
+        return generateAPIResponse(SignUpSerializer(user).data,"Password updated", status.HTTP_201_CREATED)
+
+class DeleteAccountView(APIView):
+    def delete(self, request):
+        user = request.user
+        user.delete()
+        return generateAPIResponse({}, "Account deleted successfully", status.HTTP_200_OK)

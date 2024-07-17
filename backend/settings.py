@@ -33,6 +33,7 @@ ALLOWED_HOSTS = ["*"]
 # Application definition
 
 INSTALLED_APPS = [
+    # "daphne",
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -86,6 +87,8 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'backend.wsgi.application'
+# ASGI_APPLICATION = 'backend.asgi.application'
+
 
 
 # Database
@@ -100,7 +103,7 @@ DATABASES = {
 
 
 DATABASES = {
-'default': {
+'default1': {
     'ENGINE': 'django.db.backends.postgresql_psycopg2',
     'NAME': "defaultdb", 
     'USER': "doadmin",
@@ -108,7 +111,7 @@ DATABASES = {
     'HOST':"db-postgresql-nyc3-26705-do-user-16518620-0.b.db.ondigitalocean.com", 
     'PORT': "25060",
 },
- 'default1': {
+ 'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
     }
