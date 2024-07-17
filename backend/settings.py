@@ -94,16 +94,16 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
 
 
 DATABASES = {
-'default1': {
+'default': {
     'ENGINE': 'django.db.backends.postgresql_psycopg2',
     'NAME': "defaultdb", 
     'USER': "doadmin",
@@ -111,7 +111,7 @@ DATABASES = {
     'HOST':"db-postgresql-nyc3-26705-do-user-16518620-0.b.db.ondigitalocean.com", 
     'PORT': "25060",
 },
- 'default': {
+ 'default1': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
     }
