@@ -36,6 +36,5 @@ class UpdateLike(APIView):
         else:
             Like.objects.create(liked_by=liker, liked=liking)
         serializer = SignUpSerializer(liker)
-        print(serializer.data)
         return generateAPIResponse(serializer.data, "Like updated successfully", status=status.HTTP_200_OK)
 

@@ -4,9 +4,10 @@ from asgiref.sync import async_to_sync
 
 from chats.models import Chat
 from chats.serializers import ChatSerializer
+from deviceTokens.models import DeviceToken
 from users.models import User
 import json
-
+from firebase_admin import messaging
 from utils.helpers import convert_base64_to_image
 
 
@@ -90,7 +91,6 @@ class ChatConsumer(JsonWebsocketConsumer):
     
     def receive(self, text_data=None, bytes_data=None, **kwargs):
         content = json.loads(text_data)
-        print(content)
 
         if content.get("message_file") :
             reciever_id = content["reciever_id"]
@@ -111,9 +111,28 @@ class ChatConsumer(JsonWebsocketConsumer):
                 message_type="image"
 
             )
+            
+            try:
+                user_token = DeviceToken.objects.get(user = reciever)
+
+
+                n_message = messaging.Message(
+                notification=messaging.Notification(
+                    title="Notification",
+                    body=f"You recieved a message from "+sender.full_name,
+                ),
+                token=user_token.token.strip(),
+            )
+                messaging.send(n_message)
+
+            except Exception as  e:
+                pass
+                
         
             
             serializer = ChatSerializer(chat)
+            
+            
             
            
 

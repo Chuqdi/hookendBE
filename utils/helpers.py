@@ -78,7 +78,6 @@ def formatResumeDownloadLink(role_id):
      
 
 def generateUserOTP(email):
-    print(email)
     user = User.objects.get(email=email)
     code = GenerateRandomString.randomStringGenerator(6).upper()
     c = UserEmailActivationCode.objects.create(user=user, code =code)

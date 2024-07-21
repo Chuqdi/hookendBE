@@ -13,7 +13,6 @@ class UpdateUserPlan(APIView):
     def post(self, request, ):
         user = request.user
         plan = request.data.get("plan")
-        print(plan)
 
         if plan == "PREMIUM":
             premium = user.premium 
@@ -69,9 +68,7 @@ class InitializePaymentIntentView(APIView):
             currency="gbp",
             automatic_payment_methods={"enabled": True},
             )
-            print(paymentIntent)
         except Exception as e:
-            print(e)
             return
         
 

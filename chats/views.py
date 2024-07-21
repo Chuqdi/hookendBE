@@ -14,7 +14,6 @@ from rest_framework import status
 class DeleteUsersChatView(APIView):
     def delete(self, request, reciever_id):
         user = request.user
-        print("Here")
         try:
             reciever = User.objects.get(id=reciever_id)
         except User.DoesNotExist:

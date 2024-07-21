@@ -65,7 +65,6 @@ class ImplementAdavancedFilterView(APIView):
             ~Q(id = user.id)
         )
         filteredUsers = implementAdvancedFilter(users,user)
-        print(filteredUsers)
         return generateAPIResponse(
             SignUpSerializer(filteredUsers, many = True).data,
             "Users filtered successfully",
@@ -78,7 +77,6 @@ class RemoveAdvancedFilterField(APIView):
         user = request.user
         advancedFilter = UserAdvancedFilter.objects.get(id = user.advancedFilterValues.id)
         identifier = request.data.get("identifier")
-        print(identifier)
         setattr(advancedFilter, identifier, "")
         advancedFilter.save()
         user.advancedFilterValues = advancedFilter
@@ -112,9 +110,7 @@ class LoginUserView(APIView):
         )
 
         if user is not None:
-            print(
-                SignUpSerializer(user).data
-            )
+            
             data={
                 "user":SignUpSerializer(user).data,
                 "token":user.auth_token.key
@@ -237,7 +233,6 @@ class UpdateUserProfileImageView(APIView):
             user.save()
             
         userSerializer = SignUpSerializer(user)
-        print("Here")
         return generateAPIResponse(userSerializer.data,"User Image updated successfully", status.HTTP_200_OK)
     
     def post(self, request):
@@ -255,7 +250,6 @@ class UpdateUserProfileImageView(APIView):
                 user.second_profile_image = files.get(file)
             
             if update_index == "2":
-                print("here")
                 user.third_profile_image = files.get(file)
             
             if update_index == "3":
@@ -343,7 +337,6 @@ class GetUsersListView(APIView):
         country = request.GET.get("country", "")
         ageMaximumRange = request.GET.get("ageMaximumRange", "")
         ageMinimumRange = request.GET.get("ageMinimumRange", "")
-        print("refreching")
 
 
         if women == "true":
@@ -365,11 +358,7 @@ class GetUsersListView(APIView):
 
             ##if user is looking for men
             if request.user.what_you_are_looking_for ==settings.LOOKINGFOR[0]:
-                print("users before")
-                print(users)
                 users = users.filter(gender=settings.GENDERS[0])
-                print("users after")
-                print(users)
             
             ##if user is looking for women
             if request.user.what_you_are_looking_for ==settings.LOOKINGFOR[1]:
