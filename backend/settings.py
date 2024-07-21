@@ -11,6 +11,8 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
 import os
+import firebase_admin
+from firebase_admin import credentials
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -33,13 +35,15 @@ ALLOWED_HOSTS = ["*"]
 # Application definition
 
 INSTALLED_APPS = [
-    # "daphne",
+    "daphne",
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    "channels",
+
 
     "rest_framework",
     'django_celery_beat',
@@ -52,9 +56,9 @@ INSTALLED_APPS = [
     "likes",
     "payments",
     "blocks",
-    "reports"
-
-
+    "reports",
+    "chats",
+    "deviceTokens"
 ]
 
 MIDDLEWARE = [
@@ -86,9 +90,9 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'backend.wsgi.application'
-# ASGI_APPLICATION = 'backend.asgi.application'
 
+# WSGI_APPLICATION = 'backend.wsgi.application'
+ASGI_APPLICATION = "backend.asgi.application"
 
 
 # Database
@@ -191,6 +195,22 @@ AWS_S3_OBJECT_PARAMETERS = {
 AWS_LOCATION = "static"
 
 
+if DEBUG:
+    CHANNEL_LAYERS = {
+        "default": {
+            "BACKEND": "channels.layers.InMemoryChannelLayer"
+        }
+    }
+else:
+    CHANNEL_LAYERS = {
+        "default": {
+            "BACKEND": "channels_redis.core.RedisChannelLayer",
+            "CONFIG": {
+                "hosts": ['rediss://default:AVNS_Fu7c4zrbriYymm_G1yb@db-redis-nyc3-28044-do-user-16518620-0.e.db.ondigitalocean.com:25061'],
+            },
+        },
+    }
+
 
 
 
@@ -200,3 +220,18 @@ STATIC_URL = "https://%s/%s/" % (AWS_S3_CUSTOM_DOMAIN, AWS_LOCATION)
 STATICFILES_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
 DEFAULT_FROM_EMAIL = "Hooked <support@jobaffairs.co>"
 DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
+
+
+GENDERS = [
+  "Male",
+  "Female",
+  "Non-binary",
+  "I'd rather not say"
+]
+
+LOOKINGFOR = ['Men', 'Women',"Both" ]
+
+
+
+cred = credentials.Certificate(BASE_DIR.joinpath("hooked-1c8c0-firebase-adminsdk-rcfsb-c516e375e9.json"))
+firebase_admin.initialize_app(cred)

@@ -14,5 +14,8 @@ urlpatterns = [
     path(ROOT_URL +"payments/", include("payments.urls")),
     path(ROOT_URL +"blocks/", include("blocks.urls")),
     path(ROOT_URL +"reports/", include("reports.urls")),
+    path(ROOT_URL +"chats/", include("chats.urls")),
+    path(ROOT_URL +"deviceTokens/", include("deviceTokens.urls")),
+    
 
 ]

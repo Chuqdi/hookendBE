@@ -2,7 +2,7 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.contrib.auth.base_user import BaseUserManager
 from django.utils import timezone
-
+from firebase_admin import messaging
 from payments.models import AdvancedFilter, BoostedProfile, Premium, PremiumHooked, WildFeature
 
 
@@ -85,6 +85,10 @@ class User(AbstractUser,DefaultFilterManager):
     is_active = models.BooleanField(default=False)
     date_of_birth = models.CharField(null=True, blank=True, max_length=300)
     age = models.CharField(null=True, blank=True, max_length=300)
+    latitude = models.TextField(null=True, blank=True)
+    longitude = models.TextField(null=True, blank=True)
+    isOnline = models.BooleanField(default=False)
+
     
     profile_views = models.IntegerField(default=0, null=True, blank=True)
     first_profile_image = models.ImageField(null=True, blank=True, upload_to="profile_images/")
@@ -115,6 +119,23 @@ class User(AbstractUser,DefaultFilterManager):
     
     def perm_module(self, *args, **kwargs):
         return True
+    
+    
+    # def sendMobileNotification(self, messageText,*args, **kwargs):
+    #     try:
+    #         user_token = DeviceToken.objects.get(user = self)
+
+
+    #         n_message = messaging.Message(
+    #         notification=messaging.Notification(
+    #             title="Notification",
+    #             body=messageText,
+    #         ),
+    #         token=user_token.token.strip(),
+    #     )
+    #         messaging.send(n_message)
+    #     except Exception as e:
+    #         print(e)
     
 
     

@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import GetUserWithID, ImplementAdavancedFilterView, IncreaseUserViewsCountView, Me, RegisterUserView, UpdatePasswordView, UpdateUserDataView, LoginUserView, UpdateUserProfileImageView, GetUsersListView,GetUserMatchView,UpdateUserAdvancedFilterFieldView,RemoveAdvancedFilterField, UpdatePassworAuthdView,DeleteAccountView
+from .views import GetUserWithID, ImplementAdavancedFilterView, IncreaseUserViewsCountView, Me, RegisterUserView, UpdatePasswordView, UpdateUserDataView, LoginUserView, UpdateUserProfileImageView, GetUsersListView,GetUserMatchView,UpdateUserAdvancedFilterFieldView,RemoveAdvancedFilterField, UpdatePassworAuthdView,UpdateLocationView,DeleteAccountView
 
 
 urlpatterns = [
@@ -12,6 +12,7 @@ urlpatterns = [
     path("delete_account/", DeleteAccountView.as_view()),
     path("update_profile_images/", UpdateUserProfileImageView.as_view(), ),
     path("get_users/", GetUsersListView.as_view(), ),
+    path("update_location/",UpdateLocationView.as_view(),),
     path("update_password_auth/",UpdatePassworAuthdView.as_view(),),
     path("get_user_matches/",GetUserMatchView.as_view(), ),
     path("remove_advanced_filter/", RemoveAdvancedFilterField.as_view(),),

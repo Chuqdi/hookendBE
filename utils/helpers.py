@@ -14,9 +14,48 @@ from datetime import datetime
 from django.conf import settings
 from rest_framework.response import Response
 from rest_framework import status
+from math import radians, sin, cos, sqrt, atan2
+import base64
+import uuid
+from django.core.files.base import ContentFile
 
 
 
+
+def calculate_distance(lat1, lon1, lat2, lon2):
+    lat1 = radians(lat1)
+    lon1 = radians(lon1)
+    lat2 = radians(lat2)
+    lon2 = radians(lon2)
+    
+    R = 6371.0  
+
+    dlon = lon2 - lon1
+    dlat = lat2 - lat1
+
+    a = sin(dlat / 2)**2 + cos(lat1) * cos(lat2) * sin(dlon / 2)**2
+    c = 2 * atan2(sqrt(a), sqrt(1 - a))
+
+    distance = R * c
+    
+    return distance
+
+
+def convert_base64_to_image(file_base64):
+
+    format, imgstr = file_base64.split(';base64,')
+    ext = format.split('/')[-1] 
+
+    file_name = f"{uuid.uuid4().hex}.{ext}"
+
+    try:
+        decoded_file = base64.b64decode(imgstr)
+
+        return ContentFile(decoded_file, name=file_name)
+    except:
+        return None
+
+       
 
 
 def generateAPIResponse(data, message, status):

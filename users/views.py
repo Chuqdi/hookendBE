@@ -6,6 +6,7 @@ from users.serializers import (
     SignUpSerializer,
     UserAdvancedFilterSerializer,
 )
+from django.conf import settings
 from django.contrib.auth import get_user_model
 from rest_framework.response import Response
 from rest_framework import status
@@ -236,7 +237,8 @@ class UpdateUserProfileImageView(APIView):
             user.save()
             
         userSerializer = SignUpSerializer(user)
-        return generateAPIResponse(userSerializer.data, "User Image updated successfully", status.HTTP_200_OK)
+        print("Here")
+        return generateAPIResponse(userSerializer.data,"User Image updated successfully", status.HTTP_200_OK)
     
     def post(self, request):
         email = request.data.get("email", "").lower()
@@ -266,7 +268,11 @@ class UpdateUserProfileImageView(APIView):
             user.save()
             
         userSerializer = SignUpSerializer(user)
-        return generateAPIResponse(userSerializer.data, "User Image updated successfully", status.HTTP_200_OK)
+        
+        return generateAPIResponse({
+            "user":userSerializer.data,
+            "token":user.auth_token.key
+            },  "User Image updated successfully", status.HTTP_200_OK)
 
 class UpdateUserDataView(APIView):
     permission_classes=[permissions.AllowAny]
@@ -303,7 +309,8 @@ class GetUserMatchView(APIView):
                 |
                 Q(state__icontains = user.state)
             )
-        ).exclude(id = user.id).distinct()
+        ).filter(~Q(id = request.user.id )).distinct()
+        
 
         return generateAPIResponse(
             SignUpSerializer(users, many=True).data,
@@ -336,19 +343,40 @@ class GetUsersListView(APIView):
         country = request.GET.get("country", "")
         ageMaximumRange = request.GET.get("ageMaximumRange", "")
         ageMinimumRange = request.GET.get("ageMinimumRange", "")
+        print("refreching")
 
 
         if women == "true":
-            users = users.filter(gender="female")
+            users = users.filter(gender=settings.GENDERS[1])
         if men == "true":
-            users = users.filter(gender="male")
+            users = users.filter(gender=settings.GENDERS[0])
         if non_binary == "true":
-            users = users.filter(gender="non_binary")
+            users = users.filter(gender=settings.GENDERS[2])
         if len(country):
             users = users.filter(country=country)
         
         if ageMaximumRange and ageMinimumRange:
             users = users.filter(age__range=(int(ageMinimumRange), int(ageMaximumRange)))
+
+
+        
+        if women != "true" and men != "true":
+            ## USE USER PROFILE TO FILTER GENDER
+
+            ##if user is looking for men
+            if request.user.what_you_are_looking_for ==settings.LOOKINGFOR[0]:
+                print("users before")
+                print(users)
+                users = users.filter(gender=settings.GENDERS[0])
+                print("users after")
+                print(users)
+            
+            ##if user is looking for women
+            if request.user.what_you_are_looking_for ==settings.LOOKINGFOR[1]:
+                users = users.filter(gender=settings.GENDERS[1])
+            ##if user is looking for both
+            if request.user.what_you_are_looking_for ==settings.LOOKINGFOR[2]:
+                users = users.filter(gender=settings.GENDERS[2])
         
 
 
@@ -414,6 +442,21 @@ class UpdatePassworAuthdView(APIView):
         user.save()
         return generateAPIResponse(SignUpSerializer(user).data,"Password updated", status.HTTP_201_CREATED)
 
+
+class UpdateLocationView(APIView):
+    def patch(self, request):
+        user = get_user_model().objects.get(id = request.user.id)
+        longitude = request.data.get("longitude")
+        latitude = request.data.get("latitude")
+        user.longitude = longitude
+        user.latitude = latitude
+        user.save()
+
+        return generateAPIResponse(
+            SignUpSerializer(user).data,
+            "User location updated successfully",
+            status.HTTP_200_OK
+        )
 class DeleteAccountView(APIView):
     def delete(self, request):
         user = request.user
