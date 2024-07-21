@@ -195,7 +195,7 @@ AWS_S3_OBJECT_PARAMETERS = {
 AWS_LOCATION = "static"
 
 
-if DEBUG:
+if False:
     CHANNEL_LAYERS = {
         "default": {
             "BACKEND": "channels.layers.InMemoryChannelLayer"
