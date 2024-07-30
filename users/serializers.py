@@ -1,6 +1,6 @@
 from blocks.serailizers import BlockSerializer
 from likes.serializers import LikeSerializer
-from payments.serializers import AdvancedFilterSerializer, BoostedProfileSerializer, PremiumHookedSerializer, PremiumSerializer, WildFeatureSerializer
+from payments.serializers import AdvancedFilterSerializer, BoostedProfileSerializer, PremiumHookedSerializer, PremiumPlusSerializer, WildFeatureSerializer
 from users.models import  User,UserAdvancedFilter
 from rest_framework import serializers
 from rest_framework.authtoken.models import Token
@@ -24,7 +24,7 @@ class SignUpSerializer(serializers.ModelSerializer):
         read_only=True,
         many=True,
     )
-    premium = PremiumSerializer(
+    premiumPlus = PremiumPlusSerializer(
         many=False,
         read_only=True,
     )
@@ -103,8 +103,11 @@ class SignUpSerializer(serializers.ModelSerializer):
             "fifth_profile_image",
             "users_blocked",
             "advancedFilterValues",
+            "coin",
+            "teddy",
+            "rose",
 
-            "premium",
+            "premiumPlus",
             "premiumHooked",
             "wildFeature",
             "advancedFilter",

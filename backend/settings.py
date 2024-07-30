@@ -58,7 +58,9 @@ INSTALLED_APPS = [
     "blocks",
     "reports",
     "chats",
-    "deviceTokens"
+    "deviceTokens",
+    "notifications",
+    "gifts"
 ]
 
 MIDDLEWARE = [
@@ -195,7 +197,7 @@ AWS_S3_OBJECT_PARAMETERS = {
 AWS_LOCATION = "static"
 
 
-if False:
+if True:
     CHANNEL_LAYERS = {
         "default": {
             "BACKEND": "channels.layers.InMemoryChannelLayer"
@@ -234,4 +236,14 @@ LOOKINGFOR = ['Men', 'Women',"Both" ]
 
 
 cred = credentials.Certificate(BASE_DIR.joinpath("hooked-1c8c0-firebase-adminsdk-rcfsb-c516e375e9.json"))
-firebase_admin.initialize_app(cred)
+fireb =firebase_admin.initialize_app(cred)
+print(fireb.credential.project_id)
+
+
+EMAIL_HOST = "smtp.mailgun.org"
+EMAIL_USE_TLS = False
+EMAIL_USE_SSL = True
+EMAIL_PORT = 465
+DEFAULT_FROM_EMAIL = "Onhooked<support@onhooked.com>"
+EMAIL_HOST_USER = "support@onhooked.com"
+EMAIL_HOST_PASSWORD ="gODFATHERTINZ1@"

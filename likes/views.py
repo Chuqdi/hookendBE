@@ -8,7 +8,7 @@ from django.db.models import Q
 from users.models import User
 from users.serializers import SignUpSerializer
 from .models import Like
-from utils.helpers import generateAPIResponse, generateUserOTP
+from utils.helpers import generateAPIResponse, generateUserOTP, sendMobileNotification
 
 
 
@@ -35,6 +35,11 @@ class UpdateLike(APIView):
             isLiked.delete()
         else:
             Like.objects.create(liked_by=liker, liked=liking)
+            print("Should send")
+            sendMobileNotification(
+                liking,
+                f"You recieved a like from {liker.full_name}"
+            )
         serializer = SignUpSerializer(liker)
         return generateAPIResponse(serializer.data, "Like updated successfully", status=status.HTTP_200_OK)
 

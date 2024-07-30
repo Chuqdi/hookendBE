@@ -2,8 +2,7 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.contrib.auth.base_user import BaseUserManager
 from django.utils import timezone
-from firebase_admin import messaging
-from payments.models import AdvancedFilter, BoostedProfile, Premium, PremiumHooked, WildFeature
+from payments.models import AdvancedFilter, BoostedProfile, PremiumPlus, PremiumHooked, WildFeature
 
 
 
@@ -88,6 +87,12 @@ class User(AbstractUser,DefaultFilterManager):
     latitude = models.TextField(null=True, blank=True)
     longitude = models.TextField(null=True, blank=True)
     isOnline = models.BooleanField(default=False)
+    
+    
+    coin = models.IntegerField(default=0)
+    rose = models.IntegerField(default=0)
+    teddy = models.IntegerField(default=0)
+    
 
     
     profile_views = models.IntegerField(default=0, null=True, blank=True)
@@ -103,7 +108,7 @@ class User(AbstractUser,DefaultFilterManager):
     advancedFilterValues = models.OneToOneField(UserAdvancedFilter, on_delete=models.CASCADE, null=True, blank=True)
 
     ##Subscriptions
-    premium = models.OneToOneField(Premium, on_delete=models.CASCADE, related_name="premium", null=True, blank=True)
+    premiumPlus = models.OneToOneField(PremiumPlus, on_delete=models.CASCADE, related_name="premium", null=True, blank=True)
     premiumHooked = models.OneToOneField(PremiumHooked, on_delete=models.CASCADE, related_name="premium", null=True, blank=True)
     wildFeature =  models.OneToOneField(WildFeature, on_delete=models.CASCADE, related_name="premium", null=True, blank=True)
     advancedFilter = models.OneToOneField(AdvancedFilter,  on_delete=models.CASCADE, related_name="premium", null=True, blank=True)
@@ -121,21 +126,7 @@ class User(AbstractUser,DefaultFilterManager):
         return True
     
     
-    # def sendMobileNotification(self, messageText,*args, **kwargs):
-    #     try:
-    #         user_token = DeviceToken.objects.get(user = self)
-
-
-    #         n_message = messaging.Message(
-    #         notification=messaging.Notification(
-    #             title="Notification",
-    #             body=messageText,
-    #         ),
-    #         token=user_token.token.strip(),
-    #     )
-    #         messaging.send(n_message)
-    #     except Exception as e:
-    #         print(e)
+    
     
 
     

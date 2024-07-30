@@ -1,8 +1,10 @@
 import threading
 from django.utils import timezone
+from deviceTokens.models import DeviceToken
 from utils.randomString import GenerateRandomString
 from users.models import  User, UserEmailActivationCode
 from datetime import timedelta
+from firebase_admin import messaging
 from django.core.mail import EmailMessage
 from django.utils.http import urlsafe_base64_encode
 from django.utils.encoding import force_bytes
@@ -91,7 +93,19 @@ def generateSecureEmailCredentials(user):
     return {"uidb64": uidb64, "token": token}
 
 
-
+def sendMobileNotification(user, messageText,):
+        try:
+            user_token = DeviceToken.objects.get(user = user)
+            n_message = messaging.Message(
+            notification=messaging.Notification(
+                title="Notification",
+                body=messageText,
+            ),
+            token=user_token.token.strip(),
+        )
+            messaging.send(n_message)
+        except Exception as e:
+            print(e)
 
 def validateOTPCode(code):
     

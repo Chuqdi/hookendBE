@@ -2,6 +2,7 @@ from django.db import models
 
 class ParentSub(models.Model):
     date_created = models.DateTimeField(null=True, blank=True)
+    date_to_complete = models.DateField(null=True, blank=True)
     is_active = models.BooleanField(default=False)
 
 
@@ -9,8 +10,7 @@ class ParentSub(models.Model):
     class Meta:
         abstract = True
 
-    def __str__(self) -> str:
-        return self.date_created
+
 
 
 
@@ -32,6 +32,6 @@ class PremiumHooked(ParentSub):
     class Meta:
         pass   
 
-class Premium(ParentSub):
+class PremiumPlus(ParentSub):
     class Meta:
         pass

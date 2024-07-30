@@ -16,6 +16,6 @@ urlpatterns = [
     path(ROOT_URL +"reports/", include("reports.urls")),
     path(ROOT_URL +"chats/", include("chats.urls")),
     path(ROOT_URL +"deviceTokens/", include("deviceTokens.urls")),
-    
-
+    path(ROOT_URL +"notifications/", include("notifications.urls")),
+    path(ROOT_URL +"gifts/", include("gifts.urls")),
 ]

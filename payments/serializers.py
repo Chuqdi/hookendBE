@@ -1,4 +1,4 @@
-from .models import AdvancedFilter, BoostedProfile, Premium, PremiumHooked, WildFeature
+from .models import AdvancedFilter, BoostedProfile, PremiumPlus, PremiumHooked, WildFeature
 from rest_framework import serializers
 
 
@@ -10,9 +10,9 @@ class BoostedProfileSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
-class PremiumSerializer(serializers.ModelSerializer):
+class PremiumPlusSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Premium
+        model = PremiumPlus
         fields = "__all__"
 
 
