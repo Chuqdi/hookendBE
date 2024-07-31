@@ -1,5 +1,5 @@
 
-from channels.generic.websocket import JsonWebsocketConsumer,AsyncConsumer, AsyncWebsocketConsumer, WebsocketConsumer
+from channels.generic.websocket import JsonWebsocketConsumer
 from asgiref.sync import async_to_sync
 
 from chats.models import Chat

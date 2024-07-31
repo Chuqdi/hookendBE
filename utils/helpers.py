@@ -104,6 +104,7 @@ def sendMobileNotification(user, messageText,):
             token=user_token.token.strip(),
         )
             messaging.send(n_message)
+            print("Notification senf")
         except Exception as e:
             print(e)
 

@@ -35,7 +35,6 @@ class UpdateLike(APIView):
             isLiked.delete()
         else:
             Like.objects.create(liked_by=liker, liked=liking)
-            print("Should send")
             sendMobileNotification(
                 liking,
                 f"You recieved a like from {liker.full_name}"

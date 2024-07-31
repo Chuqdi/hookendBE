@@ -4,7 +4,7 @@ from rest_framework.views import APIView
 from users.models import User
 from .serializers import NotificationSerializer
 from notifications.models import Notification
-from utils.helpers import generateAPIResponse
+from utils.helpers import generateAPIResponse, sendMobileNotification
 from rest_framework import status
 
 
@@ -22,7 +22,6 @@ class GetUserNotificationsView(APIView):
         except:
             return generateAPIResponse({}, "Notification reciever not found", status=status.HTTP_400_BAD_REQUEST)
         
-        print("Here")
         
         
         notifications = Notification.objects.create(
@@ -32,6 +31,11 @@ class GetUserNotificationsView(APIView):
             likedPhoto=likedPhoto,
             notification_sender=user
         )
+        
+        sendMobileNotification(
+                notification_reciever,
+                f"{user.full_name} commentted on your image."
+            )
         
         return generateAPIResponse(NotificationSerializer(notifications).data, "Notification created", status=status.HTTP_201_CREATED)
     def get(self, request):
