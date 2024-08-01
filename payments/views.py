@@ -37,7 +37,6 @@ class UpdateUserPlan(APIView):
             premium.save()
         
         if plan == "PREMIUMPLUS":
-            print("Here on premium plus")
             premiumPlus = user.premiumPlus
             if not premiumPlus:
                 print("Setting premium plus")

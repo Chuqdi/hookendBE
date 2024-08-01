@@ -2,6 +2,8 @@ from django.shortcuts import render
 from gifts.models import Gift
 from notifications.models import Notification
 from users.models import User
+from firebase_admin import messaging
+from deviceTokens.models import DeviceToken
 from utils.helpers import generateAPIResponse
 from rest_framework.views import APIView
 from rest_framework import status
@@ -52,6 +54,24 @@ class GetOrSendGiftsView(APIView):
             user_sending = user
         )
         giftTypeLower = giftType.lower()
+        
+        
+                
+        try:
+            user_token = DeviceToken.objects.get(user = recieving_user)
+
+
+            n_message = messaging.Message(
+                notification=messaging.Notification(
+                    title="Notification",
+                    body=f"You recieved a message {giftTypeLower} from "+user.full_name,
+                ),
+                token=user_token.token.strip(),
+            )
+            messaging.send(n_message)
+
+        except Exception as  e:
+            pass
         
         n = Notification.objects.create(
             notification_sender= request.user,
