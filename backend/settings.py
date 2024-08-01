@@ -236,8 +236,7 @@ LOOKINGFOR = ['Men', 'Women',"Both" ]
 
 
 cred = credentials.Certificate(BASE_DIR.joinpath("hooked-1c8c0-firebase-adminsdk-rcfsb-c516e375e9.json"))
-fireb =firebase_admin.initialize_app(cred)
-print(fireb.credential.project_id)
+firebase_admin.initialize_app(cred)
 
 
 EMAIL_HOST = "smtp.mailgun.org"
