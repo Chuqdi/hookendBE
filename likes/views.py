@@ -37,7 +37,7 @@ class UpdateLike(APIView):
             Like.objects.create(liked_by=liker, liked=liking)
             sendMobileNotification(
                 liking,
-                f"You recieved a like from {liker.full_name}"
+                f"You recieved a like from {liking.full_name}"
             )
         serializer = SignUpSerializer(liker)
         return generateAPIResponse(serializer.data, "Like updated successfully", status=status.HTTP_200_OK)
