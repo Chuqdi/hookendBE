@@ -30,15 +30,22 @@ class UpdateLike(APIView):
         isLiked = Like.objects.filter(
             Q(liked_by=liker) & Q(liked=liking)
         )
+        print("\n\n\n\n\n\n\n")
+        print("\n\n\n\n\n\n\n")
+        
 
         if isLiked.exists():
+            print("Deling Like")
             isLiked.delete()
         else:
+            print("Creating Like")
             Like.objects.create(liked_by=liker, liked=liking)
             sendMobileNotification(
                 liking,
                 f"You recieved a like from {liking.full_name}"
             )
+        print("\n\n\n\n\n\n\n")
+        print("\n\n\n\n\n\n\n")
         serializer = SignUpSerializer(liker)
         return generateAPIResponse(serializer.data, "Like updated successfully", status=status.HTTP_200_OK)
 
