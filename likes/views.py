@@ -1,3 +1,4 @@
+import threading
 from django.shortcuts import render
 from rest_framework.response import Response
 from rest_framework import status
@@ -8,11 +9,29 @@ from django.db.models import Q
 from users.models import User
 from users.serializers import SignUpSerializer
 from .models import Like
-from utils.helpers import generateAPIResponse, generateUserOTP, sendMobileNotification
+from utils.helpers import generateAPIResponse, sendMobileNotification
 
 
 
 
+def checkIfUserMatchAndSendNotification(liker, liking):
+    isMatched = Like.objects.filter(
+        Q(Q(liked_by=liking) & Q(liked=liker))
+        |
+        Q(Q(liked_by=liker) & Q(liked=liking))
+        
+    ).exists()
+    
+    if isMatched:
+        sendMobileNotification(
+        liking,
+        f"You have a new match with {liker.full_name}"
+        )
+        
+        sendMobileNotification(
+            liker,
+            f"You have a new match with {liking.full_name}"
+        )
 
 
 
@@ -30,22 +49,22 @@ class UpdateLike(APIView):
         isLiked = Like.objects.filter(
             Q(liked_by=liker) & Q(liked=liking)
         )
-        print("\n\n\n\n\n\n\n")
-        print("\n\n\n\n\n\n\n")
         
 
         if isLiked.exists():
-            print("Deling Like")
             isLiked.delete()
         else:
-            print("Creating Like")
             Like.objects.create(liked_by=liker, liked=liking)
             sendMobileNotification(
                 liking,
-                f"You recieved a like from {liking.full_name}"
+                f"You recieved a like from {liker.full_name}"
             )
-        print("\n\n\n\n\n\n\n")
-        print("\n\n\n\n\n\n\n")
+        
+        tr = threading.Thread(target=checkIfUserMatchAndSendNotification, kwargs={
+            "liker": liker,
+            "liking": liking
+        })
+        tr.start()
         serializer = SignUpSerializer(liker)
         return generateAPIResponse(serializer.data, "Like updated successfully", status=status.HTTP_200_OK)
 
