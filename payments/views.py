@@ -27,6 +27,7 @@ class UpdateUserPlan(APIView):
         plan = request.data.get("plan")
         count = request.data.get("count")
         planLengthInDays = request.data.get("planLengthInDays")
+        productId = request.data.get("productId")
 
         date_to_complete = add_days_to_current_date(planLengthInDays)
         if plan == "PREMIUM":
@@ -34,16 +35,19 @@ class UpdateUserPlan(APIView):
             premium.is_active = True
             premium.date_created =timezone.now()
             premium.date_to_complete = date_to_complete
+            premium.plan = plan
+            premium.productId = productId
             premium.save()
         
         if plan == "PREMIUMPLUS":
             premiumPlus = user.premiumPlus
             if not premiumPlus:
-                print("Setting premium plus")
                 premiumPlus = PremiumPlus.objects.create()
                 user.premiumPlus
                 user.save()
             premiumPlus.is_active = True
+            premium.plan = plan
+            premium.productId = productId
             premiumPlus.date_created =timezone.now()
             premiumPlus.date_to_complete = date_to_complete
             premiumPlus.save()
@@ -53,6 +57,8 @@ class UpdateUserPlan(APIView):
             wildFeature = user.wildFeature 
             wildFeature.is_active = True
             wildFeature.date_created =timezone.now()
+            wildFeature.plan = plan
+            wildFeature.productId = productId
             wildFeature.date_to_complete = date_to_complete
             wildFeature.save()
         
@@ -60,12 +66,16 @@ class UpdateUserPlan(APIView):
             advancedFilter = user.advancedFilter 
             advancedFilter.is_active = True
             advancedFilter.date_created =timezone.now()
+            advancedFilter.plan = plan
+            advancedFilter.productId = productId
             advancedFilter.date_to_complete = date_to_complete
             advancedFilter.save()
         
         if plan == "PROFILE":
             boostedProfile = user.boostedProfile 
             boostedProfile.is_active = True
+            boostedProfile.plan = plan
+            boostedProfile.productId = productId
             boostedProfile.date_to_complete = date_to_complete
             boostedProfile.date_created =timezone.now()
             boostedProfile.save()
