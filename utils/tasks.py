@@ -1,13 +1,6 @@
 import threading
 from celery import shared_task
-from botMessages.models import BotMessage
-from deviceTokens.models import DeviceToken
-from roles.models import Distrubution, InterviewQuestion, Role
-from usermessages.models import UserMessage
 from utils.helpers import generateSecureEmailCredentials
-from django.db.models import Count
-from firebase_admin import messaging
-import random
 from .EmailSender import SendEmail, send_activation_email
 from users.models import User
 from django.template.loader import render_to_string

@@ -87,6 +87,7 @@ class User(AbstractUser,DefaultFilterManager):
     latitude = models.TextField(null=True, blank=True)
     longitude = models.TextField(null=True, blank=True)
     isOnline = models.BooleanField(default=False)
+    emailActivated = models.BooleanField(default=False)
     
     
     coin = models.IntegerField(default=0)

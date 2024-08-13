@@ -95,6 +95,7 @@ class SignUpSerializer(serializers.ModelSerializer):
             "primary_profile_image_index",
             "liking",
             "my_likes",
+            "emailActivated",
             "profile_views",
             "first_profile_image",
             "second_profile_image",

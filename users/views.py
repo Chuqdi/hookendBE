@@ -6,6 +6,7 @@ from users.serializers import (
     SignUpSerializer,
     UserAdvancedFilterSerializer,
 )
+from django.template.loader import render_to_string
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from rest_framework.response import Response
@@ -14,7 +15,8 @@ from django.contrib.auth import authenticate
 from rest_framework.views import APIView
 from rest_framework import permissions
 from django.db.models import Q
-from utils.helpers import generateAPIResponse, generateUserOTP
+from utils.helpers import generateAPIResponse, generateUserOTP, validateOTPCode
+from utils.tasks import send_email
 
 
 commonFilters = [
@@ -165,16 +167,6 @@ class RegisterUserView(APIView):
             )
         if s.is_valid():
             s.save()
-            c = generateUserOTP(email)
-            # message = render_to_string("emails/activation.html", { "code":c, "name":f"{first_name} {last_name}"})
-            # t = threading.Thread(target=send_email, args=("Verification required", message,[email]))
-            # t.start()
-
-
-
-            # message = render_to_string("emails/welcome.html", { "name":f"{first_name} {last_name}"})
-            # t = threading.Thread(target=send_email, args=(f"Welcome {first_name}", message,[email]))
-            # t.start()
 
             user = User.objects.get(email=email)
             user.is_active= True
@@ -453,3 +445,42 @@ class DeleteAccountView(APIView):
         user = request.user
         user.delete()
         return generateAPIResponse({}, "Account deleted successfully", status.HTTP_200_OK)
+    
+    
+
+
+
+class SendUserActivationEmail(APIView):
+    def post(self, request):
+        email = request.data.get("email")
+        try:
+            user = User.objects.get(email=email)
+        except User.DoesNotExist as e:
+            return generateAPIResponse({}, "User not found", status=status.HTTP_400_BAD_REQUEST)
+        c = generateUserOTP(email)
+        message = render_to_string("emails/activation.html", { "code":c, "name":f"{user.full_name}"})
+        t = threading.Thread(target=send_email, args=("Verification required", message,[email]))
+        t.start()
+        
+        
+        return generateAPIResponse({"message":"OTP sent"}, "Gift sent", status.HTTP_200_OK)
+
+class ActivateUserAccount(APIView):
+    def post(self, request):
+        code = request.data.get('code')
+        email = request.data.get('email')
+        
+        try:
+            user = User.objects.get(email=email)
+        except User.DoesNotExist as e:
+            return generateAPIResponse({}, "User not found", status=status.HTTP_400_BAD_REQUEST)
+        
+        checkCode = validateOTPCode(code).get("type")
+        
+        if checkCode:
+            user.emailActivated = True
+            user.is_active = True
+            user.save()
+            return generateAPIResponse({"data":SignUpSerializer(user).data,"message":"Account activated"}, "Account activated", status.HTTP_200_OK)
+        else:
+            return generateAPIResponse({}, "Invalid OTP", status=status.HTTP_400_BAD_REQUEST)

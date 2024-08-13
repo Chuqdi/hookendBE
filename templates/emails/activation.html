@@ -1,0 +1,59 @@
+{% include "emails/includes/header.html" %}
+
+      <center class="wrapper">
+        <table class="main">
+            <tr>
+                <td>
+                    <table>
+                        <tr>
+                            <td>
+                               <a href="https://jobofa.com">
+                                <img src="https://cvconnect.s3.amazonaws.com/static/logo.png" width="100px" />
+                               </a>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td style="padding-top: 15px;">
+                    <p class="text">Hello {{name}}</p>
+                </td>
+            </tr>
+           
+            <tr>
+                <td>
+                    <p class="inter-text">Thank you for using Jobofa,</p>
+                </td>
+            </tr>
+            <tr>
+                <td >
+                    <p class="inter-text">Here’s your One Time Password (OTP) to continue  verification.</p>
+                </td>
+            </tr>
+
+            <tr  style="margin-top: 15px;;width: 100%;">
+                <td style="padding-top: 15px;;width: 100%;">
+                    <table style="width: 100%;">
+                        <tr style="width: 100%;">
+                            <td  style="background-color: #EBE0FF; width: 100%; border-radius: 8px; padding: 8px; text-align: center;padding-right: 40px;padding-left:40px;">
+                                <p class="caption-text">{{code}}</p>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td style="padding-top:15px;;">
+                    <p class="inter-text">If you have any complaints, please contact our our support team immediately via email <a href=mailto:“support@Jobofa.co” style="color: #1A73E8;text-decoration: none;">support@Jobofa.com</a>
+                    </p>
+                </td>
+            </tr>
+           
+        </table>
+
+
+     {% include "emails/includes/footer.html" %}
+      </center>
+    </body>
+</html>
