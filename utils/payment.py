@@ -8,7 +8,7 @@ from ecdsa import SigningKey
 from ecdsa.util import sigencode_der
 from django.conf import settings
 bundle_id = 'com.sprinttech.hooked'
-# key_id = 'XWSXTGQVX2'
+key_id = 'SRVU32G44V'
 key_id="ac058d10-2ebb-4c4b-b563-3e58f0d27c19"
 product = 'profile_boost_1_month'
 offer = 'discounter' # This is the code set in ASC
@@ -37,7 +37,7 @@ def generateSignatures():
                                     sigencode=sigencode_der)
         encoded_signature = base64.b64encode(signature)
 
-    print(str(encoded_signature, 'utf-8'), str(nonce), str(timestamp), key_id)
+
     return {
         "signature": str(encoded_signature, 'utf-8'),
         "nonce": str(nonce),

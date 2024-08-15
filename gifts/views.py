@@ -59,7 +59,7 @@ class GetOrSendGiftsView(APIView):
      
         sendMobileNotification(
                 recieving_user,
-               f"You recieved a message {giftTypeLower} from "+user.full_name
+               f"{user.full_name} sent you a {giftTypeLower} "
             )
         n = Notification.objects.create(
             notification_sender= request.user,
