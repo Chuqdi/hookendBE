@@ -279,6 +279,7 @@ class UpdateUserDataView(APIView):
 
         if serializer.is_valid():
             serializer.save()
+            print(serializer.data)
             return generateAPIResponse(serializer.data,"User data updated successfully", status.HTTP_200_OK)
         
 
@@ -398,6 +399,7 @@ class UpdateUserAdvancedFilterFieldView(APIView):
         except User.DoesNotExist as e:
             return generateAPIResponse({},"User not found", status.HTTP_404_NOT_FOUND)
         del data["email"]
+        print(data)
         serializer = UserAdvancedFilterSerializer(instance=user.advancedFilterValues,  partial=True, data=data)
         user = SignUpSerializer(user)
 

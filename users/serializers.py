@@ -82,6 +82,7 @@ class SignUpSerializer(serializers.ModelSerializer):
             "longitude",
             "drink",
             "drug",
+            "readyForFamily",
             "kids",
             "language",
             "educationLevel",

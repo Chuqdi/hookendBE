@@ -15,6 +15,7 @@ class DefaultFilterManager(models.Model):
     bio = models.TextField(null=True, blank=True)
     school = models.TextField(null=True, blank=True)
     company_name = models.TextField(null=True, blank=True)
+    readyForFamily =  models.TextField(null=True, blank=True)
     work_title = models.TextField(null=True, blank=True)
     language = models.TextField(null=True, blank=True)
     drink = models.TextField(null=True, blank=True)
@@ -28,6 +29,8 @@ class DefaultFilterManager(models.Model):
     gender = models.TextField(null=True, blank=True)
     religion = models.TextField(null=True, blank=True)
     ethnicity= models.TextField(null=True, blank=True)
+    country = models.TextField(max_length=200, null=True, blank=True)
+    state = models.TextField(max_length=200, null=True, blank=True)
 
     class Meta:
         abstract = True
@@ -79,8 +82,6 @@ class User(AbstractUser,DefaultFilterManager):
     full_name = models.CharField(null=True, blank=True,max_length=150)
     phone_number =models.CharField(unique=True,null=False, blank=False,max_length=150)
     email  = models.EmailField(blank=False, null=False, unique=True,max_length=200, db_index=True)
-    country = models.TextField(max_length=200, null=True, blank=True)
-    state = models.TextField(max_length=200, null=True, blank=True)
     is_active = models.BooleanField(default=False)
     date_of_birth = models.CharField(null=True, blank=True, max_length=300)
     age = models.CharField(null=True, blank=True, max_length=300)
