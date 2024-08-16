@@ -45,6 +45,7 @@ class ChatConsumer(JsonWebsocketConsumer):
     
     def receive(self, text_data=None, bytes_data=None, **kwargs):
         content = json.loads(text_data)
+        print(content)
 
         if content.get("image") :
             reciever_id = content["reciever_id"]

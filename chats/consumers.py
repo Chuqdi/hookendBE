@@ -156,7 +156,7 @@ class ChatConsumer(JsonWebsocketConsumer):
             serializer = ChatSerializer(chat)
 
             
-
+        print("sent")
         async_to_sync(
             self.channel_layer.group_send
         )(
