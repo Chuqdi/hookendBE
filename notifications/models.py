@@ -17,3 +17,6 @@ class Notification(models.Model):
     def __str__(self) -> str:
         return super().__str__()
     
+    class Meta:
+        ordering = ["-id"]
+    

@@ -15,6 +15,7 @@ class GetUserNotificationsView(APIView):
         notification_reciever_id = request.data.get('notification_reciever_id')
         comment = request.data.get('comment')
         likedPhoto= request.data.get('likedPhoto')
+      
         
         
         try:

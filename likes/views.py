@@ -54,7 +54,8 @@ class UpdateLike(APIView):
         if isLiked.exists():
             isLiked.delete()
         else:
-            Like.objects.create(liked_by=liker, liked=liking)
+            Like.objects.create(liked_by=liker, liked=liking, 
+                                )
             sendMobileNotification(
                 liking,
                 f"{liker.full_name} liked your picture"
