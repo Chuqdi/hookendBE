@@ -16,7 +16,7 @@ class Test(APIView):
         sendMobileNotification(
             user = User.objects.get(email="morganhezekiah111@gmail.com"),
             messageText = "Test Notification",
-            data={"key1":"value1", "key2":"value2"}
+            data={"screen":"Chat",}
         )
         return Response({"message":"Notification sent"}, status=status.HTTP_200_OK)
 
