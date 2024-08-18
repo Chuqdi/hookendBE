@@ -3,6 +3,8 @@ from django.contrib import admin
 from django.urls import path, include
 from rest_framework.views import APIView
 from rest_framework.permissions import AllowAny
+from users.models import User
+from utils.helpers import sendMobileNotification
 from utils.payment import generateSignatures
 from rest_framework.response import Response
 from rest_framework import status
@@ -10,13 +12,13 @@ from rest_framework import status
 class Test(APIView):
     permission_classes = [AllowAny]
     
-    def post(self, request, *args, **kwargs):
-        t = generateSignatures()
-        print(t)
-        return Response(
-            t,
-            status=status.HTTP_200_OK
+    def get(self, request, *args, **kwargs):
+        sendMobileNotification(
+            user = User.objects.get(email="morganhezekiah111@gmail.com"),
+            messageText = "Test Notification",
+            # data={"key1":"value1", "key2":"value2"}
         )
+        return Response({"message":"Notification sent"}, status=status.HTTP_200_OK)
 
 
 ROOT_URL="api/v1/"

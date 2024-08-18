@@ -93,7 +93,7 @@ def generateSecureEmailCredentials(user):
     return {"uidb64": uidb64, "token": token}
 
 
-def sendMobileNotification(user, messageText,):
+def sendMobileNotification(user, messageText,data={}):
         try:
             user_token = DeviceToken.objects.get(user = user)
             n_message = messaging.Message(
@@ -102,6 +102,7 @@ def sendMobileNotification(user, messageText,):
                 body=messageText,
             ),
             token=user_token.token.strip(),
+            # data=data
         )
             messaging.send(n_message)
             print("Notification senf")
