@@ -1,7 +1,7 @@
 import os
 from django.core.asgi import get_asgi_application
 
-from likes.consumers import LikeLiveUpdateConsumer
+from likes.consumers import LikeLiveUpdateConsumer, ChatLiveUpdateConsumer
 
 
 
@@ -20,6 +20,7 @@ from chats.consumers import ChatConsumer, OnlineStatus
 websocket_url_patterns =[
     path("ws/chat/onlineStatus/", OnlineStatus.as_asgi()),
     path("ws/likeUpdate/", LikeLiveUpdateConsumer.as_asgi()),
+    path("ws/chatUpdate/", ChatLiveUpdateConsumer.as_asgi()),
     path("ws/chat/<str:sender_id>/<str:reciever_id>/", ChatConsumer.as_asgi()),
 ]
 application = ProtocolTypeRouter(
