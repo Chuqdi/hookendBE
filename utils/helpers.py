@@ -102,7 +102,7 @@ def sendMobileNotification(user, messageText,data={}):
                 body=messageText,
             ),
             token=user_token.token.strip(),
-            # data=data
+            data=data
         )
             messaging.send(n_message)
             print("Notification senf")
