@@ -25,12 +25,18 @@ def checkIfUserMatchAndSendNotification(liker, liking):
     if isMatched:
         sendMobileNotification(
         liking,
-        f"Sparks are flying! You and {liker.full_name} are a match! Say hi and see where it goes."
+        f"Sparks are flying! You and {liker.full_name} are a match! Say hi and see where it goes.",
+        data={
+            "screen":"Likes"
+        }
         )
         
         sendMobileNotification(
             liker,
-            f"Sparks are flying! You and {liking.full_name} are a match! Say hi and see where it goes."
+            f"Sparks are flying! You and {liking.full_name} are a match! Say hi and see where it goes.",
+              data={
+            "screen":"Likes"
+        }
         )
 
 
@@ -58,7 +64,10 @@ class UpdateLike(APIView):
                                 )
             sendMobileNotification(
                 liking,
-                f"{liker.full_name} liked your picture"
+                f"{liker.full_name} liked your picture",
+                  data={
+            "screen":"Notifications"
+        }
             )
         
         tr = threading.Thread(target=checkIfUserMatchAndSendNotification, kwargs={

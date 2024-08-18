@@ -35,7 +35,10 @@ class GetUserNotificationsView(APIView):
         
         sendMobileNotification(
                 notification_reciever,
-                f"{user.full_name} left a comment on your picture"
+                f"{user.full_name} left a comment on your picture",
+                data={
+            "screen":"Notifications"
+        }
             )
         
         return generateAPIResponse(NotificationSerializer(notifications).data, "Notification created", status=status.HTTP_201_CREATED)
