@@ -124,6 +124,7 @@ class ChatConsumer(JsonWebsocketConsumer):
                 token=user_token.token.strip(),
             )
                 messaging.send(n_message)
+                print("Message sent")
 
             except Exception as  e:
                 pass
@@ -131,11 +132,7 @@ class ChatConsumer(JsonWebsocketConsumer):
         
             
             serializer = ChatSerializer(chat)
-            
-            
-            
            
-
 
         else:
             reciever_id = content["reciever_id"]
@@ -146,6 +143,7 @@ class ChatConsumer(JsonWebsocketConsumer):
 
             sender= User.objects.get(id =sender_id)
             reciever= User.objects.get(id =reciever_id)
+            
           
             chat = Chat.objects.create(
                 sender = sender,
@@ -156,7 +154,6 @@ class ChatConsumer(JsonWebsocketConsumer):
             serializer = ChatSerializer(chat)
 
             
-        print("sent")
         async_to_sync(
             self.channel_layer.group_send
         )(
@@ -173,6 +170,7 @@ class ChatConsumer(JsonWebsocketConsumer):
 
     def chat_user(self, event):
         data = event["data"]
+        
 
         self.send_json(data)
 

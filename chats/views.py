@@ -51,8 +51,7 @@ class GetUserChatMessagesView(APIView):
         user = request.user
         chat_messages = Chat.objects.filter(
             Q(sender=user) | Q(reciever=user),
-        ).distinct()
-        print("Here")
+        )
 
         serializers = ChatSerializer(chat_messages, many=True)
         return generateAPIResponse(serializers.data, "Chat messages fetched successfully", status.HTTP_200_OK)

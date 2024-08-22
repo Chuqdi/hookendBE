@@ -5,14 +5,14 @@ from rest_framework.serializers import ModelSerializer
 
 
 class ChatSerializer(ModelSerializer):
-    sender = SignUpSerializer(
-        many=False,
-        read_only=True,
-    )
-    reciever = SignUpSerializer(
-        many=False,
-        read_only=True,
-    )
+    # sender = SignUpSerializer(
+    #     many=False,
+    #     read_only=True,
+    # )
+    # reciever = SignUpSerializer(
+    #     many=False,
+    #     read_only=True,
+    # )
     class Meta:
         model = Chat
         fields = [

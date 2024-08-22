@@ -63,7 +63,6 @@ class ChatLiveUpdateConsumer(JsonWebsocketConsumer):
     
     def receive(self, text_data=None, bytes_data=None, **kwargs):
         content = json.loads(text_data)
-        print("Recieved chat")
         
         
         async_to_sync(
@@ -80,6 +79,7 @@ class ChatLiveUpdateConsumer(JsonWebsocketConsumer):
     
 
     def chat_user(self, event):
+        
         data = event["data"]
 
         self.send_json(data)
