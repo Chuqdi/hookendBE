@@ -78,3 +78,28 @@ class UpdateLike(APIView):
         serializer = SignUpSerializer(liker)
         return generateAPIResponse(serializer.data, "Like updated successfully", status=status.HTTP_200_OK)
 
+
+
+class GetMatchDateView(APIView):
+    def post(self, request):
+        id = request.data.get("id")
+        user = request.user
+        
+        try:
+            matchUser = User.objects.get(id=id)
+        except User.DoesNotExist as e:
+            return generateAPIResponse({}, "User not found", status=status.HTTP_400_BAD_REQUEST)
+        
+        matches = Like.objects.filter(
+            Q(Q(liked_by=user) & Q(liked=matchUser))
+            |
+            Q(liked_by=matchUser) & Q(liked=user)
+        )
+        lastMatchDate = None
+        if matches.exists():
+            lastMatchDate = matches.last().date_liked
+        return generateAPIResponse({"data":lastMatchDate, }, "Match date retrieved", status.HTTP_200_OK)
+        
+        
+        
+        
