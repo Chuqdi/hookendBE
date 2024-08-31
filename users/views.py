@@ -327,7 +327,7 @@ class GetUserWithID(APIView):
 
 class GetUsersListView(APIView):
     def get(self, request, *args, **kwargs):
-        users = User.objects.filter(~Q(id = request.user.id)).exclude(relationshipGoal='').exclude(what_you_are_looking_for='').order_by("-id")
+        users = User.objects.filter(~Q(id = request.user.id)).exclude(relationshipGoal=None).exclude(relationshipGoal='').exclude(what_you_are_looking_for='').exclude(what_you_are_looking_for=None).order_by("-id")
         women = request.GET.get("women", "false")
         men = request.GET.get("men", "false")
         non_binary = request.GET.get("non_binary", "false")
