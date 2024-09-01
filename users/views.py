@@ -18,7 +18,7 @@ from django.db.models import Q
 from utils.helpers import generateAPIResponse, generateUserOTP, validateOTPCode
 from utils.tasks import send_email
 
-
+MAX_LIMIT = 5
 commonFilters = [
     "sexual_orientation",
     "what_you_are_looking_for",
@@ -334,6 +334,8 @@ class GetUsersListView(APIView):
         country = request.GET.get("country", "")
         ageMaximumRange = request.GET.get("ageMaximumRange", "")
         ageMinimumRange = request.GET.get("ageMinimumRange", "")
+        limit = request.GET.get("limit",1)
+        limit = int(limit)
 
 
         if women == "true":
@@ -347,6 +349,7 @@ class GetUsersListView(APIView):
         
         if ageMaximumRange and ageMinimumRange:
             users = users.filter(age__range=(int(ageMinimumRange), int(ageMaximumRange)))
+
 
 
         
@@ -365,7 +368,12 @@ class GetUsersListView(APIView):
                 users = users.filter(gender=settings.GENDERS[2])
         
 
-
+        start_index = (limit - 1) * MAX_LIMIT
+        end_index = start_index + MAX_LIMIT
+        users = users[start_index:end_index]
+        print("Users count")
+        print(users.count())
+        
 
 
 

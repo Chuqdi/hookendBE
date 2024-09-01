@@ -248,4 +248,4 @@ EMAIL_PORT = 465
 DEFAULT_FROM_EMAIL = "Onhooked<support@onhooked.com>"
 EMAIL_HOST_USER = "support@onhooked.com"
 EMAIL_HOST_PASSWORD ="gODFATHERTINZ1@"
-# USE_TZ = False
+USE_TZ = False
