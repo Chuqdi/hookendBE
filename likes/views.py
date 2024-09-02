@@ -58,7 +58,8 @@ class UpdateLike(APIView):
         
 
         if isLiked.exists():
-            isLiked.delete()
+            # isLiked.delete()
+            pass
         else:
             Like.objects.create(liked_by=liker, liked=liking, 
                                 )
