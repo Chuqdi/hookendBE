@@ -61,7 +61,8 @@ INSTALLED_APPS = [
     "chats",
     "deviceTokens",
     "notifications",
-    "gifts"
+    "gifts",
+    "likedPhotos"
 ]
 
 MIDDLEWARE = [

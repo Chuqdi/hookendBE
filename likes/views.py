@@ -6,6 +6,7 @@ from django.contrib.auth import authenticate
 from rest_framework.views import APIView
 from rest_framework import permissions
 from django.db.models import Q
+from likedPhotos.models import LikedPhoto
 from users.models import User
 from users.serializers import SignUpSerializer
 from .models import Like
@@ -45,6 +46,8 @@ class UpdateLike(APIView):
     def patch(self,request):
         liker = request.user
         liking_id = request.data.get("liking_id")
+        likedPhoto = request.data.get("likedPhoto", "")
+        
 
         try:
             liking = User.objects.get(id=liking_id)
@@ -55,6 +58,11 @@ class UpdateLike(APIView):
         isLiked = Like.objects.filter(
             Q(liked_by=liker) & Q(liked=liking)
         )
+        
+            
+            
+        if likedPhoto:
+            LikedPhoto.objects.create(user=liker, photo=likedPhoto)
         
 
         if isLiked.exists():
@@ -70,6 +78,7 @@ class UpdateLike(APIView):
             "screen":"Notifications"
         }
             )
+
         
         tr = threading.Thread(target=checkIfUserMatchAndSendNotification, kwargs={
             "liker": liker,

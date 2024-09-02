@@ -34,4 +34,6 @@ urlpatterns = [
     path(ROOT_URL +"deviceTokens/", include("deviceTokens.urls")),
     path(ROOT_URL +"notifications/", include("notifications.urls")),
     path(ROOT_URL +"gifts/", include("gifts.urls")),
+    path(ROOT_URL +"likedPhotos/", include("likedPhotos.urls")),
+    
 ]
