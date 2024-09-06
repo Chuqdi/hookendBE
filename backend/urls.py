@@ -18,16 +18,16 @@ class Test(APIView):
     def get(self, request, *args, **kwargs):
         user1 = User.objects.get(email="morganhezekiah111@gmail.com")
         # user2 = User.objects.get(email="morganhezekiah123@gmail.com")
-        user2 = User.objects.get(email="female1@yahoo.com")
+        user2 = User.objects.get(email="morganhezekiah123@gmail.com")
         
-        # female1@yahoo.com
+        firstLike = Like.objects.filter(liked_by = user1, liked=user2)
+        secondLike = Like.objects.filter(liked_by = user2, liked=user1)
+        
+        if firstLike.exists() and secondLike.exists():
+            print("match")
         
         
-        isMatched = Like.objects.filter(
-        Q(liked_by=user1, liked=user2) &
-        Q(id__in=Like.objects.filter(liked_by=user1, liked=user2).values('id'))
-    )
-        print(isMatched)
+        
         
         return Response({"message":"Notification sent"}, status=status.HTTP_200_OK)
 
