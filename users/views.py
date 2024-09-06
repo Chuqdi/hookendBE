@@ -18,7 +18,7 @@ from django.db.models import Q
 from utils.helpers import generateAPIResponse, generateUserOTP, validateOTPCode
 from utils.tasks import send_email
 
-MAX_LIMIT = 5
+MAX_LIMIT = 10
 commonFilters = [
     "sexual_orientation",
     "what_you_are_looking_for",
