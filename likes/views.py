@@ -20,6 +20,7 @@ def checkIfUserMatchAndSendNotification(liker, liking):
         Q(liked_by=liker, liked=liking) &
         Q(id__in=Like.objects.filter(liked_by=liker , liked=liking).values('id'))
     )
+    print(isMatched)
     
     if isMatched:
         sendMobileNotification(
