@@ -17,11 +17,9 @@ from utils.helpers import generateAPIResponse, sendMobileNotification
 
 def checkIfUserMatchAndSendNotification(liker, liking):
     isMatched = Like.objects.filter(
-        Q(Q(liked_by=liking) & Q(liked=liker))
-        &
-        Q(Q(liked_by=liker) & Q(liked=liking))
-        
-    ).exists()
+        Q(liked_by=liker, liked=liking) &
+        Q(id__in=Like.objects.filter(liked_by=liking, liked=liker).values('id'))
+    )
     
     if isMatched:
         sendMobileNotification(
