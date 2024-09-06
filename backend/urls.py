@@ -3,21 +3,32 @@ from django.contrib import admin
 from django.urls import path, include
 from rest_framework.views import APIView
 from rest_framework.permissions import AllowAny
+from likes.models import Like
 from users.models import User
 from utils.helpers import sendMobileNotification
 from utils.payment import generateSignatures
 from rest_framework.response import Response
 from rest_framework import status
+from django.db.models import Q
+
 
 class Test(APIView):
     permission_classes = [AllowAny]
     
     def get(self, request, *args, **kwargs):
-        sendMobileNotification(
-            user = User.objects.get(email="morganhezekiah111@gmail.com"),
-            messageText = "Test Notification",
-            data={"screen":"Chat",}
-        )
+        user1 = User.objects.get(email="morganhezekiah111@gmail.com")
+        # user2 = User.objects.get(email="morganhezekiah123@gmail.com")
+        user2 = User.objects.get(email="female1@yahoo.com")
+        
+        # female1@yahoo.com
+        
+        
+        isMatched = Like.objects.filter(
+        Q(liked_by=user1, liked=user2) &
+        Q(id__in=Like.objects.filter(liked_by=user1, liked=user2).values('id'))
+    )
+        print(isMatched)
+        
         return Response({"message":"Notification sent"}, status=status.HTTP_200_OK)
 
 
