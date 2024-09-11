@@ -14,3 +14,6 @@ class Like(models.Model):
 
     def __str__(self) -> str:
         return self.liked.email
+    
+    class Meta:
+        ordering = ["-id"]

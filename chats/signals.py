@@ -9,6 +9,6 @@ def create_profile(sender, instance, created, **kwargs):
     if created:
         sendMobileNotification(
             instance.reciever,
-            f"Chat message from {instance.sender.full_name}",
+            f"Chat message from {instance.sender.full_name}.",
             data={"screen":"Chat"}
         )

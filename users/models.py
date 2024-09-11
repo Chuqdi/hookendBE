@@ -29,8 +29,11 @@ class DefaultFilterManager(models.Model):
     gender = models.TextField(null=True, blank=True)
     religion = models.TextField(null=True, blank=True)
     ethnicity= models.TextField(null=True, blank=True)
+    genotype = models.TextField(null=True, blank=True, default="")
     country = models.TextField(max_length=200, null=True, blank=True)
     state = models.TextField(max_length=200, null=True, blank=True)
+    stateOfOrigin = models.TextField(max_length=200, null=True, blank=True, default="")
+    countryOfOrigin = models.TextField(max_length=200, null=True,blank=True, default="")
 
     class Meta:
         abstract = True

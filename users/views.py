@@ -26,8 +26,8 @@ commonFilters = [
     # "interests",
     # "bio",
     "school",
-    # "company_name",
-    # "work_title",
+    "company_name",
+    "work_title",
     "language",
     "drink",
     "drug",
@@ -38,7 +38,16 @@ commonFilters = [
     "starSign",
     "pets",
     "religion",
-    "ethnicity"
+    "ethnicity",
+]
+
+
+paidFilters = [
+    "stateOfOrigin",
+    "countryOfOrigin",
+    "readyForFamily",
+    "work_title",
+    "genotype"
 ]
 def implementAdvancedFilter(users, user):
 
@@ -50,8 +59,16 @@ def implementAdvancedFilter(users, user):
         for value in values:
             if value:
                 filter_conditions |= Q(**{f"{field}__icontains": value})
-        
     filteredUsers = users.filter(filter_conditions)
+    
+    
+    if user.premiumPlus.is_active or user.premiumHooked.is_active:
+        for field in paidFilters:
+            value = advancedFilter.values_list(field, flat=True)[0]
+            if value:
+                filter_conditions &= Q(**{f"{field}__icontains": value})
+        
+        filteredUsers = filteredUsers.filter(filter_conditions)
     return filteredUsers
 
 
@@ -267,6 +284,7 @@ class UpdateUserDataView(APIView):
     def post(self, request):
         email = request.data.get("email", "").lower()
         data = request.data
+        print(data)
         try:
             user = User.objects.get(email=email)
 
@@ -370,9 +388,10 @@ class GetUsersListView(APIView):
 
         start_index = (limit - 1) * MAX_LIMIT
         end_index = start_index + MAX_LIMIT
+        user = request.user
+        users = implementAdvancedFilter(users, user)
         users = users[start_index:end_index]
-        print("Users count")
-        print(users.count())
+
         
 
 

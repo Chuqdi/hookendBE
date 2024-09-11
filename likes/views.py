@@ -23,7 +23,9 @@ def checkIfUserMatchAndSendNotification(liker, liking):
     if isMatched:
         sendMobileNotification(
         liking,
-        f"Sparks are flying! You and {liker.full_name} are a match! Say hi and see where it goes.",
+        f"""Sparks are flying! \n
+        You and {liker.full_name} are a match! 
+        Say hi and see where it goes.""",
         data={
             "screen":"Likes"
         }
@@ -31,7 +33,9 @@ def checkIfUserMatchAndSendNotification(liker, liking):
         
         sendMobileNotification(
             liker,
-            f"Sparks are flying! You and {liking.full_name} are a match! Say hi and see where it goes.",
+            f"""Sparks are flying! \n
+            You and {liking.full_name} are a match! 
+            Say hi and see where it goes.""",
               data={
             "screen":"Likes"
         }
@@ -101,7 +105,7 @@ class GetMatchDateView(APIView):
             Q(Q(liked_by=user) & Q(liked=matchUser))
             |
             Q(liked_by=matchUser) & Q(liked=user)
-        )
+        ).order_by("id")
         lastMatchDate = None
         if matches.exists():
             lastMatchDate = matches.last().date_liked
