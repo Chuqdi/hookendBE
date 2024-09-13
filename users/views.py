@@ -389,8 +389,10 @@ class GetUsersListView(APIView):
         start_index = (limit - 1) * MAX_LIMIT
         end_index = start_index + MAX_LIMIT
         user = request.user
-        users = implementAdvancedFilter(users, user)
+        # users = implementAdvancedFilter(users, user)
         users = users[start_index:end_index]
+        
+        print(users)
 
         
 
@@ -461,6 +463,7 @@ class UpdateLocationView(APIView):
         user = get_user_model().objects.get(id = request.user.id)
         longitude = request.data.get("longitude")
         latitude = request.data.get("latitude")
+        print(latitude, longitude)
         user.longitude = longitude
         user.latitude = latitude
         user.save()
