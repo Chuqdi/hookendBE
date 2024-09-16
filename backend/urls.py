@@ -46,5 +46,6 @@ urlpatterns = [
     path(ROOT_URL +"notifications/", include("notifications.urls")),
     path(ROOT_URL +"gifts/", include("gifts.urls")),
     path(ROOT_URL +"likedPhotos/", include("likedPhotos.urls")),
-    
+    path(ROOT_URL +"savedUsers/", include("savedUsers.urls")),
+    path(ROOT_URL +"hiddenProfiles/", include("hiddenProfiles.urls")),
 ]

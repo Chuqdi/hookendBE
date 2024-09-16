@@ -284,7 +284,6 @@ class UpdateUserDataView(APIView):
     def post(self, request):
         email = request.data.get("email", "").lower()
         data = request.data
-        print(data)
         try:
             user = User.objects.get(email=email)
 
@@ -333,6 +332,20 @@ class Me(APIView):
         serializer = SignUpSerializer(user)
         return generateAPIResponse(serializer.data, "User fetched successfully", status.HTTP_200_OK)
 
+
+
+class GetUserWithPhoneNumber(APIView):
+    def get(self, request, phone_number):
+        try:
+            user = User.objects.get(phone_number=phone_number)
+        except User.DoesNotExist as e:
+            return generateAPIResponse({},"User not found", status.HTTP_404_NOT_FOUND)
+
+        serializer = SignUpSerializer(user)
+        return generateAPIResponse(serializer.data, "User fetched successfully", status.HTTP_200_OK)
+
+
+
 class GetUserWithID(APIView):
     def get(self, request, id):
         try:
@@ -354,6 +367,7 @@ class GetUsersListView(APIView):
         ageMinimumRange = request.GET.get("ageMinimumRange", "")
         limit = request.GET.get("limit",1)
         limit = int(limit)
+        nearbyCity = request.GET.get("nearbyCity","")
 
 
         if women == "true":
@@ -385,14 +399,54 @@ class GetUsersListView(APIView):
             if request.user.what_you_are_looking_for ==settings.LOOKINGFOR[2]:
                 users = users.filter(gender=settings.GENDERS[2])
         
-
+        
+        
+        user = request.user
+     
+        
+        # if user.userCurrentLocation:
+        #     users = users.filter(
+        #         Q(
+                    
+        #         state__icontains=user.userCurrentLocation
+        #         )
+        #         |
+        #         Q(
+        #         country__icontains=user.userCurrentLocation
+        #         )
+        #         |
+        #          Q(
+        #         userCurrentLocation__icontains=user.userCurrentLocation
+        #         )
+                 
+                  
+                
+                
+        #     )
+        
+        # if nearbyCity:
+        #     users = users.filter(
+        #          Q(
+                    
+        #         state__icontains=nearbyCity
+        #         )
+        #         |
+        #         Q(
+        #         country__icontains=nearbyCity
+        #         )
+        #         |
+        #          Q(
+        #         userCurrentLocation__icontains=nearbyCity
+        #          )
+        #     )
+        
+        users = users.exclude(id=user.id).order_by("?").distinct()
         start_index = (limit - 1) * MAX_LIMIT
         end_index = start_index + MAX_LIMIT
-        user = request.user
         # users = implementAdvancedFilter(users, user)
         users = users[start_index:end_index]
+            
         
-        print(users)
 
         
 
@@ -463,7 +517,6 @@ class UpdateLocationView(APIView):
         user = get_user_model().objects.get(id = request.user.id)
         longitude = request.data.get("longitude")
         latitude = request.data.get("latitude")
-        print(latitude, longitude)
         user.longitude = longitude
         user.latitude = latitude
         user.save()
@@ -517,3 +570,14 @@ class ActivateUserAccount(APIView):
             return generateAPIResponse({"data":SignUpSerializer(user).data,"message":"Account activated"}, "Account activated", status.HTTP_200_OK)
         else:
             return generateAPIResponse({}, "Invalid OTP", status=status.HTTP_400_BAD_REQUEST)
+        
+        
+        
+        
+class UpdateUserCurrentLocation(APIView):
+    def patch(self, request, *args, **kwargs):
+        user = request.user
+        location = request.data.get("address")
+        user.userCurrentLocation = location
+        user.save()
+        return generateAPIResponse(data ={}, message="User's current location updated successfully", status=status.HTTP_200_OK)

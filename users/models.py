@@ -84,6 +84,8 @@ class User(AbstractUser,DefaultFilterManager):
     username = models.CharField(null=True, blank=True,max_length=150)
     full_name = models.CharField(null=True, blank=True,max_length=150)
     phone_number =models.CharField(unique=True,null=False, blank=False,max_length=150)
+    userCurrentLocation = models.TextField(null=True, blank=True, default="")
+    additionalCountries = models.TextField(null=True, blank=True, default="")
     email  = models.EmailField(blank=False, null=False, unique=True,max_length=200, db_index=True)
     is_active = models.BooleanField(default=False)
     date_of_birth = models.CharField(null=True, blank=True, max_length=300)

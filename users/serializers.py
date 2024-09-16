@@ -71,6 +71,7 @@ class SignUpSerializer(serializers.ModelSerializer):
             "state",
             "stateOfOrigin",
             "countryOfOrigin",
+            "additionalCountries",
             "genotype",
             "sexual_orientation",
             "relationship_status",

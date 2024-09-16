@@ -62,7 +62,9 @@ INSTALLED_APPS = [
     "deviceTokens",
     "notifications",
     "gifts",
-    "likedPhotos"
+    "likedPhotos",
+    "hiddenProfiles",
+    "savedUsers",
 ]
 
 MIDDLEWARE = [
