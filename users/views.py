@@ -1,6 +1,7 @@
 import threading
 from django.http import HttpResponse
 from django.shortcuts import render
+from hiddenProfiles.models import HideProfile
 from users.models import  User, UserAdvancedFilter
 from users.serializers import (
     SignUpSerializer,
@@ -17,6 +18,10 @@ from rest_framework import permissions
 from django.db.models import Q
 from utils.helpers import generateAPIResponse, generateUserOTP, validateOTPCode
 from utils.tasks import send_email
+
+
+
+
 
 MAX_LIMIT = 10
 commonFilters = [
@@ -49,6 +54,17 @@ paidFilters = [
     "work_title",
     "genotype"
 ]
+
+
+
+def get_visible_users(current_user, users):
+    hidden_user_ids = HideProfile.objects.filter(hidden_from=current_user).values_list('hidden_by__id', flat=True)
+    
+    visible_users = users.exclude(id__in=hidden_user_ids)
+    
+    return visible_users
+
+
 def implementAdvancedFilter(users, user):
 
     filter_conditions = Q()
@@ -439,12 +455,14 @@ class GetUsersListView(APIView):
         #         userCurrentLocation__icontains=nearbyCity
         #          )
         #     )
-        
-        users = users.exclude(id=user.id).order_by("?").distinct()
+        users = get_visible_users(user, users)
+        users = users.order_by("?").distinct()
         start_index = (limit - 1) * MAX_LIMIT
         end_index = start_index + MAX_LIMIT
         # users = implementAdvancedFilter(users, user)
         users = users[start_index:end_index]
+        print(users)
+        
             
         
 

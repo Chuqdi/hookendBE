@@ -113,7 +113,7 @@ ASGI_APPLICATION = "backend.asgi.application"
 
 
 DATABASES = {
-'default': {
+'default1': {
     'ENGINE': 'django.db.backends.postgresql_psycopg2',
     'NAME': "defaultdb", 
     'USER': "doadmin",
@@ -121,7 +121,7 @@ DATABASES = {
     'HOST':"db-postgresql-nyc3-15152-do-user-16518620-0.m.db.ondigitalocean.com", 
     'PORT': "25060",
 },
- 'default1': {
+ 'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
     }
