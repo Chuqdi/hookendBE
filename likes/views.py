@@ -23,9 +23,7 @@ def checkIfUserMatchAndSendNotification(liker, liking):
     if isMatched:
         sendMobileNotification(
         liking,
-        f"""Sparks are flying! \n
-        You and {liker.full_name} are a match! 
-        Say hi and see where it goes.""",
+        f"""Sparks are flying! You and {liker.full_name} are a match.""",
         data={
             "screen":"Likes"
         }
@@ -33,9 +31,7 @@ def checkIfUserMatchAndSendNotification(liker, liking):
         
         sendMobileNotification(
             liker,
-            f"""Sparks are flying! \n
-            You and {liking.full_name} are a match! 
-            Say hi and see where it goes.""",
+            f"""Sparks are flying! You and {liking.full_name} are a match.""",
               data={
             "screen":"Likes"
         }

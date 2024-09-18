@@ -112,22 +112,7 @@ class ChatConsumer(JsonWebsocketConsumer):
 
             )
             
-            try:
-                user_token = DeviceToken.objects.get(user = reciever)
 
-
-                n_message = messaging.Message(
-                notification=messaging.Notification(
-                    title="Notification",
-                    body=f"You recieved a message from "+sender.full_name,
-                ),
-                token=user_token.token.strip(),
-            )
-                messaging.send(n_message)
-                print("Message sent")
-
-            except Exception as  e:
-                pass
                 
         
             
@@ -153,7 +138,21 @@ class ChatConsumer(JsonWebsocketConsumer):
             )
             serializer = ChatSerializer(chat)
 
-            
+        try:
+            user_token = DeviceToken.objects.get(user = reciever)
+
+
+            n_message = messaging.Message(
+            notification=messaging.Notification(
+                title="Notification",
+                body=f"You recieved a message from "+sender.full_name,
+            ),
+            token=user_token.token.strip(),
+        )
+            messaging.send(n_message)
+
+        except Exception as  e:
+            pass
         async_to_sync(
             self.channel_layer.group_send
         )(
