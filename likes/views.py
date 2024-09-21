@@ -83,7 +83,6 @@ class UpdateLike(APIView):
             notification_type = "LIKE",
             likedPhoto = likedPhoto,
         )
-            print("Notifications sent")
             
 
         

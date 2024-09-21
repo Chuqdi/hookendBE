@@ -46,9 +46,11 @@ class GetUserNotificationsView(APIView):
         notifications=  Notification.objects.filter(
             notified_users = request.user
         )
+        
         notificationsSerializer = NotificationSerializer(
             notifications,
             many=True
         )
+        
         
         return generateAPIResponse(notificationsSerializer.data, "Notifcations retrieved", status=status.HTTP_200_OK)

@@ -461,7 +461,6 @@ class GetUsersListView(APIView):
         end_index = start_index + MAX_LIMIT
         # users = implementAdvancedFilter(users, user)
         users = users[start_index:end_index]
-        print(users)
         
             
         
