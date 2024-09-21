@@ -7,6 +7,7 @@ from rest_framework.views import APIView
 from rest_framework import permissions
 from django.db.models import Q
 from likedPhotos.models import LikedPhoto
+from notifications.models import Notification
 from users.models import User
 from users.serializers import SignUpSerializer
 from .models import Like
@@ -75,6 +76,15 @@ class UpdateLike(APIView):
             "screen":"Notifications"
         }
             )
+            n = Notification.objects.create(
+            notification_sender= request.user,
+            notified_users = liking,
+            message = f"{liker.full_name} liked your picture.",
+            notification_type = "LIKE",
+            likedPhoto = likedPhoto,
+        )
+            print("Notifications sent")
+            
 
         
         tr = threading.Thread(target=checkIfUserMatchAndSendNotification, kwargs={
