@@ -456,7 +456,7 @@ class GetUsersListView(APIView):
         #          )
         #     )
         users = get_visible_users(user, users)
-        # users = users.order_by("?").distinct()
+        users = users.order_by("?").distinct()
         start_index = (limit - 1) * MAX_LIMIT
         end_index = start_index + MAX_LIMIT
         # users = implementAdvancedFilter(users, user)
