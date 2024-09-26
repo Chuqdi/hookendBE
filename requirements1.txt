@@ -28,12 +28,9 @@ django-celery-beat==2.6.0
 django-celery-results==2.5.1
 django-channels==0.7.0
 django-cors-headers==4.4.0
-django-seed==0.3.1
 django-storages==1.14.4
 django-timezone-field==6.1.0
 djangorestframework==3.15.2
-ecdsa==0.19.0
-Faker==28.1.0
 firebase-admin==6.5.0
 google-api-core==2.19.1
 google-api-python-client==2.137.0
@@ -59,7 +56,7 @@ mypy-extensions==1.0.0
 oauthlib==3.2.2
 packaging==24.1
 pathspec==0.12.1
-pillow==10.4.0
+pillow==10.2.0
 platformdirs==4.2.2
 prompt_toolkit==3.0.47
 proto-plus==1.24.0
@@ -83,7 +80,6 @@ service-identity==24.1.0
 six==1.16.0
 sqlparse==0.5.0
 stripe==10.2.0
-toposort==1.10
 Twisted==24.3.0
 txaio==23.1.1
 typing_extensions==4.12.2
@@ -94,3 +90,5 @@ vine==5.1.0
 wcwidth==0.2.13
 whitenoise==6.7.0
 zope.interface==6.4.post2
+ecdsa
+django-seed
