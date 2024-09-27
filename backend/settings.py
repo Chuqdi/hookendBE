@@ -113,15 +113,23 @@ ASGI_APPLICATION = "backend.asgi.application"
 
 
 DATABASES = {
-'default1': {
+# 'default1': {
+#     'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#     'NAME': "defaultdb", 
+#     'USER': "doadmin",
+#     'PASSWORD':"AVNS_v4SUZjBUoy-Xtl2OmEC",
+#     'HOST':"db-postgresql-nyc3-15152-do-user-16518620-0.m.db.ondigitalocean.com", 
+#     'PORT': "25060",
+# },
+'default': {
     'ENGINE': 'django.db.backends.postgresql_psycopg2',
-    'NAME': "defaultdb", 
-    'USER': "doadmin",
-    'PASSWORD':"AVNS_v4SUZjBUoy-Xtl2OmEC",
-    'HOST':"db-postgresql-nyc3-15152-do-user-16518620-0.m.db.ondigitalocean.com", 
-    'PORT': "25060",
+    'NAME': "d6fus9ik5abkkh", 
+    'USER': "u7ft1fiaemli6b",
+    'PASSWORD':"p0cf70194fac318d827dba04c3aa8480ac84325a01a832604a2d97e009cd584a9",
+    'HOST':"c8m0261h0c7idk.cluster-czrs8kj4isg7.us-east-1.rds.amazonaws.com", 
+    'PORT': "5432",
 },
- 'default': {
+ 'default1': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
     }
