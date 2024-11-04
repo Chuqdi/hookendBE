@@ -209,7 +209,7 @@ AWS_S3_OBJECT_PARAMETERS = {
 AWS_LOCATION = "static"
 
 
-if True:
+if False:
     CHANNEL_LAYERS = {
         "default": {
             "BACKEND": "channels.layers.InMemoryChannelLayer"
@@ -220,7 +220,7 @@ else:
         "default": {
             "BACKEND": "channels_redis.core.RedisChannelLayer",
             "CONFIG": {
-                "hosts": ['rediss://default:AVNS_Fu7c4zrbriYymm_G1yb@db-redis-nyc3-28044-do-user-16518620-0.e.db.ondigitalocean.com:25061'],
+                "hosts": ['redis://red-cskg5sdds78s739b9k9g:6379'],
             },
         },
     }
